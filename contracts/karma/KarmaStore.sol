@@ -24,6 +24,8 @@ contract KarmaStore is Ownable{
   mapping (address => uint256) public karmaByUser;
   // Mapping of incremental Karma since last iteration by user
   mapping (address => uint256) public incrementalKarmaByUser;
+  // Total karma created since last iteration
+  uint256 public totalIncrementalKarma;
   // List of users that received karma since last iteration
   address[] public usersIncremented;
 
@@ -79,6 +81,7 @@ contract KarmaStore is Ownable{
       usersIncremented.push(_user);
     }
     incrementalKarmaByUser[_user] = incrementalKarmaByUser[_user].add(karma);
+    totalIncrementalKarma = totalIncrementalKarma.add(karma);
     emit UserRewarded(msg.sender, _user, _action, karma);
   }
 
@@ -119,6 +122,8 @@ contract KarmaStore is Ownable{
     }
     // Empty the incremented users array (reset it to its initial empty value)
     delete usersIncremented;
+    // Reset the karma count
+    totalIncrementalKarma = 0;
     // Broadcast successful flushing to the world
     emit KarmaFlushed(msg.sender, usersCount);
   }

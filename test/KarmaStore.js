@@ -69,6 +69,7 @@ contract('KarmaStore', function([owner, alice, bob, cindy]) {
     assert.equal(await getIncrementalKarma(alice), 0)
     assert.equal(await getIncrementalKarma(bob), 0)
     assert.equal(await getIncrementalKarma(cindy), 0)
+    assert.equal(await getTotalIncrementalKarma(), 0)
 
     await karmaStore.reward(alice, LIKE, { from: bob })
 
@@ -79,6 +80,7 @@ contract('KarmaStore', function([owner, alice, bob, cindy]) {
     assert.equal(await getIncrementalKarma(alice), LIKE_KARMA)
     assert.equal(await getIncrementalKarma(bob), 0)
     assert.equal(await getIncrementalKarma(cindy), 0)
+    assert.equal(await getTotalIncrementalKarma(), LIKE_KARMA)
 
     await karmaStore.reward(alice, FOLLOWER, { from: cindy })
 
@@ -89,6 +91,7 @@ contract('KarmaStore', function([owner, alice, bob, cindy]) {
     assert.equal(await getIncrementalKarma(alice), LIKE_KARMA + FOLLOWER_KARMA)
     assert.equal(await getIncrementalKarma(bob), 0)
     assert.equal(await getIncrementalKarma(cindy), 0)
+    assert.equal(await getTotalIncrementalKarma(), LIKE_KARMA + FOLLOWER_KARMA)
 
     await karmaStore.reward(bob, INVITE, { from: alice })
 
@@ -99,6 +102,7 @@ contract('KarmaStore', function([owner, alice, bob, cindy]) {
     assert.equal(await getIncrementalKarma(alice), LIKE_KARMA + FOLLOWER_KARMA)
     assert.equal(await getIncrementalKarma(bob), INVITE_KARMA)
     assert.equal(await getIncrementalKarma(cindy), 0)
+    assert.equal(await getTotalIncrementalKarma(), LIKE_KARMA + FOLLOWER_KARMA + INVITE_KARMA)
 
     await karmaStore.flush({ from: owner })
 
@@ -109,6 +113,7 @@ contract('KarmaStore', function([owner, alice, bob, cindy]) {
     assert.equal(await getIncrementalKarma(alice), 0)
     assert.equal(await getIncrementalKarma(bob), 0)
     assert.equal(await getIncrementalKarma(cindy), 0)
+    assert.equal(await getTotalIncrementalKarma(), 0)
 
     await karmaStore.updateReward(FOLLOWER, FOLLOWER_KARMA + 1, { from: owner })
 
@@ -121,6 +126,7 @@ contract('KarmaStore', function([owner, alice, bob, cindy]) {
     assert.equal(await getIncrementalKarma(alice), 0)
     assert.equal(await getIncrementalKarma(bob), 0)
     assert.equal(await getIncrementalKarma(cindy), FOLLOWER_KARMA + 1)
+    assert.equal(await getTotalIncrementalKarma(), FOLLOWER_KARMA + 1)
 
     await karmaStore.flush({ from: owner })
 
@@ -131,6 +137,7 @@ contract('KarmaStore', function([owner, alice, bob, cindy]) {
     assert.equal(await getIncrementalKarma(alice), 0)
     assert.equal(await getIncrementalKarma(bob), 0)
     assert.equal(await getIncrementalKarma(cindy), 0)
+    assert.equal(await getTotalIncrementalKarma(), 0)
   })
 
   async function getKarma (user) {
@@ -139,6 +146,10 @@ contract('KarmaStore', function([owner, alice, bob, cindy]) {
 
   async function getIncrementalKarma (user) {
     return (await karmaStore.getIncrementalKarma(user)).toNumber()
+  }
+
+  async function getTotalIncrementalKarma (user) {
+    return (await karmaStore.totalIncrementalKarma()).toNumber()
   }
 
   async function getIncrementedUsersCount () {
