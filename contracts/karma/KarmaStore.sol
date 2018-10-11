@@ -95,7 +95,7 @@ contract KarmaStore is Ownable{
   */
   function setReward(bytes32 _action, uint256 _karma) public onlyOwner {
     // Prevent the overriding of an existing action
-    require(rewardByAction[_action] == 0);
+    require(rewardByAction[_action] == 0, "cannot set existing reward, use update instead");
     rewardByAction[_action] = _karma;
     emit RewardSet(msg.sender, _action, _karma);
   }
@@ -104,7 +104,7 @@ contract KarmaStore is Ownable{
     // Ensure the action already exists, to prevent a new action being created
     // if the spelling of the action to update is not correct.
     uint256 oldKarma = rewardByAction[_action];
-    require(oldKarma > 0);
+    require(oldKarma > 0, "action does not exist");
     rewardByAction[_action] = _newKarma;
     emit RewardUpdated(msg.sender, _action, oldKarma,  _newKarma);
   }
@@ -112,7 +112,7 @@ contract KarmaStore is Ownable{
   function flush() public onlyOwner {
     uint256 usersCount = usersIncremented.length;
     // For each user that has been incremented in the last iteration
-    for (uint i=0; i<usersCount; i++) {
+    for (uint i = 0; i<usersCount; i++) {
       // Retrieve the user address
       address user = usersIncremented[i];
       // Increment the all-time user karma with the karma recently earned
