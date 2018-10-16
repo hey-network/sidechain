@@ -13,6 +13,8 @@ contract('KarmaStore', function([owner, alice, bob, cindy]) {
   const FOLLOWER_KARMA = 5
   const INVITE_KARMA = 3
 
+  const MODEL_ID = 'ab2HG376sddgBF'
+
   beforeEach('setup contract for each test', async function() {
     karmaStore = await KarmaStore.new({ from: owner })
 
@@ -71,7 +73,7 @@ contract('KarmaStore', function([owner, alice, bob, cindy]) {
     assert.equal(await getIncrementalKarma(cindy), 0)
     assert.equal(await getTotalIncrementalKarma(), 0)
 
-    await karmaStore.reward(alice, LIKE, { from: bob })
+    await karmaStore.reward(alice, LIKE, MODEL_ID, { from: bob })
 
     assert.equal(await getKarma(alice), 0)
     assert.equal(await getKarma(bob), 0)
@@ -82,7 +84,7 @@ contract('KarmaStore', function([owner, alice, bob, cindy]) {
     assert.equal(await getIncrementalKarma(cindy), 0)
     assert.equal(await getTotalIncrementalKarma(), LIKE_KARMA)
 
-    await karmaStore.reward(alice, FOLLOWER, { from: cindy })
+    await karmaStore.reward(alice, FOLLOWER, MODEL_ID, { from: cindy })
 
     assert.equal(await getKarma(alice), 0)
     assert.equal(await getKarma(bob), 0)
@@ -93,7 +95,7 @@ contract('KarmaStore', function([owner, alice, bob, cindy]) {
     assert.equal(await getIncrementalKarma(cindy), 0)
     assert.equal(await getTotalIncrementalKarma(), LIKE_KARMA + FOLLOWER_KARMA)
 
-    await karmaStore.reward(bob, INVITE, { from: alice })
+    await karmaStore.reward(bob, INVITE, MODEL_ID, { from: alice })
 
     assert.equal(await getKarma(alice), 0)
     assert.equal(await getKarma(bob), 0)
@@ -117,7 +119,7 @@ contract('KarmaStore', function([owner, alice, bob, cindy]) {
 
     await karmaStore.updateReward(FOLLOWER, FOLLOWER_KARMA + 1, { from: owner })
 
-    await karmaStore.reward(cindy, FOLLOWER, { from: bob })
+    await karmaStore.reward(cindy, FOLLOWER, MODEL_ID, { from: bob })
 
     assert.equal(await getKarma(alice), LIKE_KARMA + FOLLOWER_KARMA)
     assert.equal(await getKarma(bob), INVITE_KARMA)

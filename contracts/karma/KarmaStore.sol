@@ -37,7 +37,7 @@ contract KarmaStore is Ownable{
   ███████╗ ╚████╔╝ ███████╗██║ ╚████║   ██║   ███████║
   ╚══════╝  ╚═══╝  ╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝
   */
-  event UserRewarded(address by, address user, bytes32 action, uint256 karma);
+  event UserRewarded(address by, address user, bytes32 action, bytes32 modelId, uint256 karma);
   event RewardSet(address by, bytes32 action, uint256 karma);
   event RewardUpdated(address by, bytes32 action, uint256 oldKarma, uint256 newKarma);
   event KarmaFlushed(address by, uint256 usersCount);
@@ -74,7 +74,7 @@ contract KarmaStore is Ownable{
   ╚██████╔╝███████║███████╗██║  ██║███████║
    ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝╚══════╝
   */
-  function reward(address _user, bytes32 _action) public {
+  function reward(address _user, bytes32 _action, bytes32 _modelId) public {
     uint256 karma = rewardByAction[_action];
     // Flag the user as having been incremented during this iteration
     if (incrementalKarmaByUser[_user] == 0){
@@ -82,7 +82,7 @@ contract KarmaStore is Ownable{
     }
     incrementalKarmaByUser[_user] = incrementalKarmaByUser[_user].add(karma);
     totalIncrementalKarma = totalIncrementalKarma.add(karma);
-    emit UserRewarded(msg.sender, _user, _action, karma);
+    emit UserRewarded(msg.sender, _user, _action, _modelId, karma);
   }
 
   /*
