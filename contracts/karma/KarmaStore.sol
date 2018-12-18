@@ -27,7 +27,7 @@ contract KarmaStore is Ownable{
   // Total karma created since last iteration
   uint256 public totalIncrementalKarma;
   // List of users that received karma since last iteration
-  address[] public usersIncremented;
+  address[] public incrementedUsers;
 
   /*
   ███████╗██╗   ██╗███████╗███╗   ██╗████████╗███████╗
@@ -62,8 +62,13 @@ contract KarmaStore is Ownable{
     _karma = incrementalKarmaByUser[_user];
   }
 
+  function getIncrementedUsersAt(uint256 _index) public view returns(address _user) {
+    // _user = 0x0000000000000000000000000000000000000000; //incrementedUsers[_index];
+    _user = incrementedUsers[_index];
+  }
+
   function getIncrementedUsersCount() public view returns(uint256 _count) {
-    _count = usersIncremented.length;
+    _count = incrementedUsers.length;
   }
 
   /*
@@ -78,7 +83,7 @@ contract KarmaStore is Ownable{
     uint256 karma = rewardByAction[_action];
     // Flag the user as having been incremented during this iteration
     if (incrementalKarmaByUser[_user] == 0){
-      usersIncremented.push(_user);
+      incrementedUsers.push(_user);
     }
     incrementalKarmaByUser[_user] = incrementalKarmaByUser[_user].add(karma);
     totalIncrementalKarma = totalIncrementalKarma.add(karma);
@@ -110,18 +115,18 @@ contract KarmaStore is Ownable{
   }
 
   function flush() public onlyOwner {
-    uint256 usersCount = usersIncremented.length;
+    uint256 usersCount = incrementedUsers.length;
     // For each user that has been incremented in the last iteration
     for (uint i = 0; i<usersCount; i++) {
       // Retrieve the user address
-      address user = usersIncremented[i];
+      address user = incrementedUsers[i];
       // Increment the all-time user karma with the karma recently earned
       karmaByUser[user] = karmaByUser[user].add(incrementalKarmaByUser[user]);
       // Reset the user's incremental karma
       incrementalKarmaByUser[user] = 0;
     }
     // Empty the incremented users array (reset it to its initial empty value)
-    delete usersIncremented;
+    delete incrementedUsers;
     // Reset the karma count
     totalIncrementalKarma = 0;
     // Broadcast successful flushing to the world
