@@ -11,11 +11,13 @@
     "test": "test"
   },
   "scripts": {
+    "lint": "solium --dir ./contracts --fix",
     "test": "truffle test"
   },
   "author": "Hey Group S.A.",
   "license": "ISC",
   "dependencies": {
+    "openzeppelin-solidity": "2.0.0",
     "truffle": "^4.1.13"
   },
   "devDependencies": {
