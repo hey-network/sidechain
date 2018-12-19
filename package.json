@@ -1,5 +1,9 @@
 {
-  "name": "backend-childchain",
+  "name": "sidechain",
+  "engines": {
+    "node": "8"
+  },
+  "repository": "github:hey-network/sidechain",
   "version": "1.0.0",
   "description": "",
   "main": "truffle-config.js",
@@ -9,7 +13,7 @@
   "scripts": {
     "test": "truffle test"
   },
-  "author": "",
+  "author": "Hey Group S.A.",
   "license": "ISC",
   "dependencies": {
     "truffle": "^4.1.13"

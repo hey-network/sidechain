@@ -63,7 +63,6 @@ contract KarmaStore is Ownable{
   }
 
   function getIncrementedUsersAt(uint256 _index) public view returns(address _user) {
-    // _user = 0x0000000000000000000000000000000000000000; //incrementedUsers[_index];
     _user = incrementedUsers[_index];
   }
 
