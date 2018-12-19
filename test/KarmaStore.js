@@ -66,7 +66,7 @@ contract('KarmaStore', function([owner, alice, bob, cindy]) {
     assert.equal(await karmaStore.getReward(LIKE), 1e10)
   })
 
-  it.only('happy path - allows a user to trigger rewarding of another user for an action, then allows the owner to flush the karma generated', async function () {
+  it('happy path - allows a user to trigger rewarding of another user for an action, then allows the owner to flush the karma generated', async function () {
     assert.equal(await getKarma(alice), 0)
     assert.equal(await getKarma(bob), 0)
     assert.equal(await getKarma(cindy), 0)
